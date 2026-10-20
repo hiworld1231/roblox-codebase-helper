@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "roblox-context-mcp"
-version = "0.3.2"
+version = "0.3.3"
 description = "Metadata-first, read-only Roblox Studio context for MCP clients"
 requires-python = ">=3.11"
 dependencies = ["mcp>=1.26,<2", "tree-sitter==0.25.2", "tree-sitter-luau==1.2.0"]

@@ -13,7 +13,7 @@ command=[sys.executable,'-m','PyInstaller','--noconfirm','--clean','--onefile','
  '--hidden-import','tree_sitter','--hidden-import','tomllib']
 for directory in ('plugin','skills'):
  command += ['--add-data',f'{ROOT/directory}:{directory}']
-command += ['--add-data',f'{ROOT/"LICENSE"}:.',str(ROOT/'install.py')]
+command += ['--add-data',f'{ROOT/"LICENSE"}:.','--add-data',f'{ROOT/"roblox_context/_graph_base.py"}:roblox_context',str(ROOT/'install.py')]
 subprocess.run(command,cwd=ROOT,check=True)
 output=ROOT/'dist'/args.name
 if not output.exists() and output.with_suffix('.exe').exists():output=output.with_suffix('.exe')
