@@ -1,6 +1,7 @@
 """No-Rojo packaging and filesystem metadata-index lifecycle."""
 import importlib.util
 import json
+import os
 from pathlib import Path
 import tempfile
 import unittest
@@ -41,8 +42,12 @@ class PackagingTests(unittest.TestCase):
             self.assertEqual(config.read_bytes(), before)
             output = root / ".context/plugin.rbxmx"
             build_plugin(root, output, private=True)
-            self.assertEqual(output.stat().st_mode & 0o777, 0o600)
-            self.assertEqual(config.stat().st_mode & 0o777, 0o600)
+            if os.name != "nt":
+                self.assertEqual(output.stat().st_mode & 0o777, 0o600)
+                self.assertEqual(config.stat().st_mode & 0o777, 0o600)
+            else:
+                # Windows user-profile ACLs are not represented by Unix mode bits.
+                self.assertTrue(output.is_file() and config.is_file())
 
     def test_local_index_add_delete_rename_without_reading_source(self):
         with tempfile.TemporaryDirectory() as temporary:

@@ -119,7 +119,7 @@ Windows source users can open `Install-Windows.cmd`; Linux: `sh Install-Linux.sh
 Use `--runtime-python /path/to/existing/python` to reuse a compatible environment
 without installing libraries. `--plugin-dir PATH` chooses an ambiguous Studio profile.
 `--place-id NUMBER` optionally restricts a fresh installation to one game.
-`--language ru` selects Russian Studio labels in terminal setup.
+All product text and agent instructions are English.
 [Setup details / removal](docs/INSTALLATION.md) · [API](docs/API.md)
 
 The repository includes `.claude-plugin` / `.codex-plugin` skill manifests as an optional

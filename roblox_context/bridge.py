@@ -5,6 +5,8 @@ from collections import deque
 import hmac
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
+import os
+import socket
 import secrets
 import threading
 import time
@@ -49,7 +51,14 @@ class Bridge:
             def log_message(self, *args):
                 pass
 
-        self.http = ThreadingHTTPServer(("127.0.0.1", port), Handler)
+        class LocalHTTPServer(ThreadingHTTPServer):
+            # Windows SO_REUSEADDR can permit two owners on the same listening port.
+            allow_reuse_address = os.name != "nt"
+            def server_bind(self):
+                if os.name == "nt":
+                    self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_EXCLUSIVEADDRUSE, 1)
+                super().server_bind()
+        self.http = LocalHTTPServer(("127.0.0.1", port), Handler)
         self.http.daemon_threads = True
         self.thread = threading.Thread(target=self.http.serve_forever, name="context-loopback", daemon=True)
 

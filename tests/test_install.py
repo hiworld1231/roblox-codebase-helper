@@ -59,7 +59,7 @@ class InstallationTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             home=Path(temp)/'home';plugins=home/'Studio Plugins';plugins.mkdir(parents=True)
             root=Path(temp)/'Roblox Codebase Helper'
-            with patch.dict('os.environ',{},clear=True):
+            with patch.dict('os.environ',{},clear=False):
                 result=install(clients=['codex','claude-code'],plugin_dir=plugins,root=root,home=home,runtime_python=sys.executable)
                 again=install(clients=['codex','claude-code'],plugin_dir=plugins,root=root,home=home,runtime_python=sys.executable)
             settings=json.loads((root/'.context/config.json').read_text())

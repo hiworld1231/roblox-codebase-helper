@@ -46,14 +46,15 @@ def plugin_directories(home=None, platform=None, environ=None):
 
 
 def client_paths(home=None):
+    env = {} if home is not None else os.environ
     home = Path(home or Path.home())
-    codex = Path(os.environ.get('CODEX_HOME', home / '.codex')) / 'config.toml'
+    codex = Path(env.get('CODEX_HOME', home / '.codex')) / 'config.toml'
     if sys.platform == 'darwin':
         desktop = home / 'Library/Application Support/Claude/claude_desktop_config.json'
     elif sys.platform == 'win32':
-        desktop = Path(os.environ.get('APPDATA', home / 'AppData/Roaming')) / 'Claude/claude_desktop_config.json'
+        desktop = Path(env.get('APPDATA', home / 'AppData/Roaming')) / 'Claude/claude_desktop_config.json'
     else:
-        desktop = Path(os.environ.get('XDG_CONFIG_HOME', home / '.config')) / 'Claude/claude_desktop_config.json'
+        desktop = Path(env.get('XDG_CONFIG_HOME', home / '.config')) / 'Claude/claude_desktop_config.json'
     return {'codex': codex, 'claude-code': home / '.claude.json', 'claude-desktop': desktop}
 
 
@@ -111,13 +112,14 @@ def copy_payload(destination):
 
 def install(*, clients, plugin_dir, root=None, runtime_python=None, language='en', place_id=None, progress=lambda text: None, home=None):
     root = Path(root or data_root()).resolve()
+    client_home = home
     home = Path(home or Path.home())
     plugin_dir = Path(plugin_dir).expanduser().resolve()
-    if not clients or any(c not in client_paths(home) for c in clients):
+    if not clients or any(c not in client_paths(client_home) for c in clients):
         raise ValueError('Select at least one supported AI client')
     if not plugin_dir.is_dir() and not plugin_dir.parent.is_dir():
         raise ValueError('Studio Plugins folder not found. Open Studio once, or select its actual Plugins folder')
-    if language not in ('en', 'ru') or (place_id is not None and (type(place_id) is not int or place_id < 0)):
+    if language != 'en' or (place_id is not None and (type(place_id) is not int or place_id < 0)):
         raise ValueError('Invalid language or place ID')
     root.mkdir(parents=True, exist_ok=True, mode=0o700)
     root.chmod(0o700)
@@ -149,7 +151,7 @@ def install(*, clients, plugin_dir, root=None, runtime_python=None, language='en
         command = Path(runtime_python).expanduser().absolute() if runtime_python else root / 'runtime' / ('Scripts/python.exe' if sys.platform == 'win32' else 'bin/python')
         args = [str(app / 'scripts/run.py'), '--root', str(root), 'serve']
     # Validate client files and skill collisions before any configuration mutation.
-    plans = [(client_paths(home)[client], render_client(client_paths(home)[client], client, command, args)) for client in clients]
+    plans = [(client_paths(client_home)[client], render_client(client_paths(client_home)[client], client, command, args)) for client in clients]
     skill_paths = []
     if 'codex' in clients:
         skill_paths.append(home / '.agents/skills' / MARKER)
@@ -197,7 +199,7 @@ def install(*, clients, plugin_dir, root=None, runtime_python=None, language='en
     for target in skill_paths:
         shutil.copytree(source_skill, target, dirs_exist_ok=True)
         atomic_text(target / '.codebase-helper-managed', 'Managed by roblox-codebase-helper\n')
-    record = {'version': '0.3.0', 'root': str(root), 'clients': list(clients), 'plugin': str(plugin_dir / 'RobloxContextMCP.rbxmx'),
+    record = {'version': '0.3.1', 'root': str(root), 'clients': list(clients), 'plugin': str(plugin_dir / 'RobloxContextMCP.rbxmx'),
               'command': str(command), 'args': args, 'skills': [str(p) for p in skill_paths], 'language': language, 'automaticSourceScan': False}
     atomic_text(root / 'install.json', json.dumps(record, indent=2) + '\n', private=True)
     progress('Installed. Reconnect your AI clients, then connect the project in Studio.')
@@ -211,7 +213,7 @@ def main(argv=None):
     parser.add_argument('--plugin-dir', type=Path)
     parser.add_argument('--data-dir', type=Path)
     parser.add_argument('--runtime-python', type=Path)
-    parser.add_argument('--language', choices=('en','ru'), default='en')
+    parser.add_argument('--language', choices=('en',), default='en')
     parser.add_argument('--place-id', type=int)
     options = parser.parse_args(argv)
     directories = plugin_directories()

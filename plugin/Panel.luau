@@ -1,9 +1,7 @@
 -- Native Studio dock widget. All UI lives outside the game's DataModel.
 return function(pluginObject, config, action)
-    local ru = config.language == "ru"
-    local function t(en, russian) return ru and russian or en end
     local toolbar = pluginObject:CreateToolbar("Codebase Helper")
-    local toggle = toolbar:CreateButton("CodebaseHelperPanel", t("Open codebase context", "Открыть контекст проекта"), "", "Codebase")
+    local toggle = toolbar:CreateButton("CodebaseHelperPanel", "Open codebase context", "", "Codebase")
     toggle.ClickableWhenViewportHidden = true
     local info = DockWidgetPluginGuiInfo.new(Enum.InitialDockState.Right, true, false, 360, 590, 300, 440)
     local widget = pluginObject:CreateDockWidgetPluginGuiAsync("RobloxCodebaseHelper", info)
@@ -30,10 +28,10 @@ return function(pluginObject, config, action)
             Text=text,TextSize=size,Font=bold and Enum.Font.SourceSansSemibold or Enum.Font.SourceSans,TextColor3=color or c.text,
             TextWrapped=true,TextXAlignment=Enum.TextXAlignment.Left,TextYAlignment=Enum.TextYAlignment.Top}, parent)
     end
-    label(scroll,"Eyebrow",t("STUDIO / LOCAL CONTEXT", "STUDIO / КОНТЕКСТ ПРОЕКТА"),12,true,c.muted)
+    label(scroll,"Eyebrow","STUDIO / LOCAL CONTEXT",12,true,c.muted)
     label(scroll,"Heading","Codebase Helper",26,true)
-    label(scroll,"Intro",t("Your project, ready for your AI agent.","Проект под рукой у ИИ-агента."),16,false,c.muted)
-    local status = label(scroll,"Status",t("Ready to connect", "Готов к подключению"),17,true,c.blue)
+    label(scroll,"Intro","Your project, ready for your AI agent.",16,false,c.muted)
+    local status = label(scroll,"Status","Ready to connect",17,true,c.blue)
     order += 1
     local card = make("Frame",{Name="Project",LayoutOrder=order,Size=UDim2.new(1,0,0,0),AutomaticSize=Enum.AutomaticSize.Y,BackgroundColor3=c.surface,BorderSizePixel=0},scroll)
     make("UICorner",{CornerRadius=UDim.new(0,12)},card)
@@ -41,10 +39,10 @@ return function(pluginObject, config, action)
     make("UIListLayout",{Padding=UDim.new(0,6),SortOrder=Enum.SortOrder.LayoutOrder},card)
     label(card,"ProjectName",game.Name,19,true)
     label(card,"PlaceId","Place ID · "..tostring(game.PlaceId),14,false,c.muted)
-    label(card,"ReadOnly",t("Read-only · no game changes", "Только чтение · без изменений игры"),14,true,c.good)
+    label(card,"ReadOnly","Read-only · no game changes",14,true,c.good)
     local count = label(card,"ScriptCount","—",38,true)
-    label(card,"CountCaption",t("scripts in the metadata index", "скриптов в индексе метаданных"),15,false,c.muted)
-    local cached = label(card,"CachedCount",t("Source is read only when requested.","Код читается только по запросу агента."),15,false,c.muted)
+    label(card,"CountCaption","scripts in the metadata index",15,false,c.muted)
+    local cached = label(card,"CachedCount","Source is read only when requested.",15,false,c.muted)
     local primary, disconnect, backup
     local buttons = {}
     local function button(name,text,kind,callback)
@@ -58,13 +56,11 @@ return function(pluginObject, config, action)
         table.insert(buttons,b)
         return b
     end
-    primary=button("Connect",t("Connect this project", "Подключить этот проект"),"primary",function() action("connect") end)
-    disconnect=button("Disconnect",t("Disconnect", "Отключить"),"secondary",function() action("disconnect") end)
-    backup=button("Backup",t("Back up database", "Сохранить копию базы"),"secondary",function() action("backup") end)
-    label(scroll,"Autosave",t("The database saves automatically. Backups include metadata, task checkpoints and already cached code.",
-        "База сохраняется автоматически. В копию входят индекс, состояние задач и уже прочитанный код."),14,false,c.muted)
-    local detail=label(scroll,"Detail",t("Open Codex or Claude, then connect here. Allow localhost access if Studio asks.",
-        "Открой Codex или Claude, затем подключись здесь. Если Studio запросит доступ к localhost — разреши его."),15,false,c.muted)
+    primary=button("Connect","Connect this project","primary",function() action("connect") end)
+    disconnect=button("Disconnect","Disconnect","secondary",function() action("disconnect") end)
+    backup=button("Backup","Back up database","secondary",function() action("backup") end)
+    label(scroll,"Autosave","The database saves automatically. Backups include metadata, task checkpoints and already cached code.",14,false,c.muted)
+    local detail=label(scroll,"Detail","Open Codex or Claude, then connect here. Allow localhost access if Studio asks.",15,false,c.muted)
     order += 1
     local location=make("TextBox",{Name="BackupPath",LayoutOrder=order,Size=UDim2.new(1,0,0,60),BackgroundColor3=c.surface,TextColor3=c.text,TextSize=13,
         Font=Enum.Font.Code,TextWrapped=true,TextXAlignment=Enum.TextXAlignment.Left,TextYAlignment=Enum.TextYAlignment.Top,TextEditable=false,
@@ -77,11 +73,11 @@ return function(pluginObject, config, action)
     function panel.update(data)
         status.Text=data.status or status.Text
         if data.scripts then count.Text=tostring(data.scripts) end
-        if data.cachedScripts then cached.Text=t("Code cached on request: ","Код прочитан по запросу: ")..tostring(data.cachedScripts).." / "..tostring(data.scripts) end
+        if data.cachedScripts then cached.Text="Code cached on request: "..tostring(data.cachedScripts).." / "..tostring(data.scripts) end
         if data.detail then detail.Text=data.detail end
         if data.path then location.Text=data.path;location.Visible=true end
         local ready=data.connected==true
-        primary.Text=ready and t("Refresh metadata index", "Обновить индекс метаданных") or t("Connect this project", "Подключить этот проект")
+        primary.Text=ready and "Refresh metadata index" or "Connect this project"
         for _,b in buttons do
             b.Active=not data.busy and (b==primary or ready)
             b.AutoButtonColor=b.Active

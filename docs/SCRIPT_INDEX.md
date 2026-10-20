@@ -1,7 +1,7 @@
 # Script index
 
 Local tooling sources; connected games have separate projects/PLACE/SESSION/docs indexes.
-Metadata fingerprint: `990401799016e5d46722be93e52076597dd4015b75b3a4a218dc5aac97107b1b`.
+Metadata fingerprint: `ee90e545e4247cffd74acf8ea258ea0c8285d5530fca94821b749cfd9a1d503d`.
 
 | Name | Type | Filesystem path | Explorer location | Realm | Evidence |
 |---|---|---|---|---|---|

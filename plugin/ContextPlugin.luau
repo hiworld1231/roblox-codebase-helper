@@ -26,10 +26,9 @@ local pendingAction = nil
 local panel
 local createPanel = __CONTEXT_PANEL__
 local function ui(data) if panel then panel.update(data) end end
-local function words(en, ru) return config.language == "ru" and ru or en end
 panel = createPanel(plugin, config, function(action)
     pendingAction = action
-    ui({status=words("Working…", "Выполняется…"),connected=connected,busy=true})
+    ui({status="Working…",connected=connected,busy=true})
 end)
 
 local function isScript(item)
@@ -268,7 +267,7 @@ task.spawn(function()
                 enabled = false
                 if connected then post("/pause", {}) end
                 connected = false
-                ui({status=words("Disconnected · cache saved", "Отключён · кэш сохранён"),connected=false})
+                ui({status="Disconnected · cache saved",connected=false})
             elseif pendingAction == "connect" then
                 pendingAction = nil
                 enabled = true
@@ -278,12 +277,12 @@ task.spawn(function()
             if not enabled then return end
             if RunService:IsRunning() then
                 if connected and not paused then post("/pause", {}); paused = true end
-                ui({status=words("Paused during Play", "Приостановлен на время Play"),connected=false})
+                ui({status="Paused during Play",connected=false})
                 return
             end
             startCollector()
             if not connected or paused then
-                ui({status=words("Indexing metadata…", "Индексирую метаданные…"),connected=false,busy=true})
+                ui({status="Indexing metadata…",connected=false,busy=true})
                 post("/hello", { placeId = game.PlaceId, jobId = game.JobId, name = game.Name })
                 snapshot()
                 connected = true
@@ -299,12 +298,12 @@ task.spawn(function()
             if pendingAction == "backup" then
                 pendingAction = nil
                 local saved = post("/ui/backup", {})
-                ui({status=words("Backup saved", "Копия сохранена"),connected=true,path=saved.path,
-                    detail=words("Private local backup. Select the path to copy it.", "Локальная копия. Выдели путь, чтобы скопировать.")})
+                ui({status="Backup saved",connected=true,path=saved.path,
+                    detail="Private local backup. Select the path to copy it."})
                 lastStatus = os.clock()
             elseif panel.visible() and os.clock() - lastStatus > 5 then
                 local state = post("/ui/status", {})
-                state.status = words("Connected · saved automatically", "Подключён · автосохранение")
+                state.status = "Connected · saved automatically"
                 state.connected = true
                 ui(state)
                 lastStatus = os.clock()
@@ -315,9 +314,8 @@ task.spawn(function()
         else
             connected = false
             pendingAction = nil
-            ui({status=words("Waiting for Codex / Claude", "Ожидаю Codex / Claude"),connected=false,
-                detail=words("Start your AI client or reconnect its roblox_context MCP. Studio may ask for localhost permission.",
-                    "Открой ИИ-клиент или переподключи MCP roblox_context. Studio может запросить доступ к localhost.")})
+            ui({status="Waiting for Codex / Claude",connected=false,
+                detail="Start your AI client or reconnect its roblox_context MCP. Studio may ask for localhost permission."})
             failures = math.min(failures + 1, 5)
         end
         -- Heartbeats carry no source and cause no graph/index rebuilding.

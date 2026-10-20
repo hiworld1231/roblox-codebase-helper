@@ -7,7 +7,9 @@ New-Item -ItemType Directory -Path $taskDir | Out-Null
 try {
     $binary = Join-Path $taskDir $asset
     Invoke-WebRequest "$base/$asset" -OutFile $binary
-    $checksum = (Invoke-WebRequest "$base/$asset.sha256").Content.Trim().Split(' ')[0]
+    $checksumFile = Join-Path $taskDir ($asset + '.sha256')
+    Invoke-WebRequest "$base/$asset.sha256" -OutFile $checksumFile
+    $checksum = (Get-Content -Raw $checksumFile).Trim().Split(' ')[0]
     if ((Get-FileHash $binary -Algorithm SHA256).Hash -ine $checksum) { throw 'Download checksum mismatch. Retry installation.' }
     & $binary --cli
     if ($LASTEXITCODE -ne 0) { throw "Setup failed (exit $LASTEXITCODE). Read the message above and retry." }

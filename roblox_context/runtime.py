@@ -47,7 +47,7 @@ class Runtime:
                 bridge = Bridge(store, self.settings['token'], self.settings['port'])
             except OSError as error:
                 store.close()
-                if error.errno != errno.EADDRINUSE:
+                if error.errno not in (errno.EADDRINUSE, errno.EACCES):
                     raise
                 health = self._remote('/client/health', {})
                 if health.get('root') != str(self.root) or health.get('protocol') != 1:
