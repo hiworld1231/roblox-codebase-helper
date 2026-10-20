@@ -1,0 +1,88 @@
+{
+  "date": "2026-10-20",
+  "placeId": 83440863421402,
+  "project": "CSS",
+  "mode": "Studio Edit, read-only",
+  "inventory": {
+    "scripts": 658,
+    "metadataObjects": 903,
+    "scriptClasses": {
+      "Script": 19,
+      "LocalScript": 56,
+      "ModuleScript": 583
+    },
+    "initialSourceReads": 0,
+    "initialSourceBytes": 0
+  },
+  "literalLookup": {
+    "task": "Locate OutputSelection in CSSConsole.ConsoleController",
+    "baseline": {
+      "task": "Locate OutputSelection in CSSConsole.ConsoleController",
+      "scope": "game.StarterGui.CSSConsole",
+      "calls": 1,
+      "requestBytes": 392,
+      "responseBytes": 9529,
+      "sourceUtf8Bytes": 8989,
+      "matchingLines": [
+        12
+      ],
+      "method": "Actual official Studio MCP read-only complete selected script; raw result measured without printing source",
+      "totalBytes": 9921
+    },
+    "contextMCP": {
+      "calls": 1,
+      "requestBytes": 187,
+      "responseBytes": 1251,
+      "matchingLines": [
+        12
+      ],
+      "complete": true,
+      "checkedScripts": 1,
+      "unavailableSources": 0,
+      "totalBytes": 1438
+    },
+    "scopeDiscovery": "Excluded equally: selected CSSConsole scope known in both workflows",
+    "responseMeasurement": "Normalized compact tool request and MCP CallToolResult JSON; excludes JSON-RPC framing. Source response is reconstructed from the exact saved server JSON; no raw script is published."
+  },
+  "retainedRange": {
+    "lines": "1..16",
+    "normalRead": {
+      "calls": 1,
+      "requestBytes": 168,
+      "responseBytes": 2026,
+      "totalBytes": 2194
+    },
+    "conditionalRead": {
+      "calls": 1,
+      "requestBytes": 389,
+      "responseBytes": 327,
+      "unchanged": true,
+      "totalBytes": 716
+    }
+  },
+  "dependencyInspection": {
+    "selectedScripts": 4,
+    "totalScripts": 658,
+    "staticRequireEdges": 3,
+    "unreadScripts": 654,
+    "reverseCoverageComplete": false
+  },
+  "idleDelta": {
+    "sourceReads": 0,
+    "sourceBytes": 0,
+    "metadataBatches": 0,
+    "graphBuilds": 0
+  },
+  "schemaBytes": {
+    "before": 4456,
+    "after": 5340,
+    "increase": 884
+  },
+  "limits": [
+    "Scope was known; discovering an unknown subsystem costs additional queries.",
+    "New full seven-tool schema is 5340 bytes; feature delta is 884 bytes over the existing seven tools. Client schema caching/account quota are not measured.",
+    "Context savings vary with task and source size; this is not a fixed account-limit saving.",
+    "Only four selected sources were read; no all-project source completeness claim.",
+    "No CSS game edits, attributes, objects or Play state changes were made."
+  ]
+}

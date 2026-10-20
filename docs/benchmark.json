@@ -1,0 +1,51 @@
+{
+  "measurement": "Tool text UTF-8 bytes, not account tokens. Context uses compact JSON; request/schema/startup overhead excluded. Test scripts include padding; short targeted official reads are also compared. Graph coverage is limited to two explicitly selected fixture scripts, not all callers in the game.",
+  "rows": [
+    {
+      "task": "Find existing VoiceJumpEvent",
+      "officialTargetedTextBytes": 132,
+      "contextReplyBytes": 739,
+      "officialCalls": 1,
+      "contextCalls": 1
+    },
+    {
+      "task": "Known caller/module dependency inspection",
+      "officialTargetedTextBytes": 503,
+      "contextReplyBytes": 1062,
+      "officialCalls": 2,
+      "contextCalls": 1
+    },
+    {
+      "task": "Caller graph versus default full-file read",
+      "officialFullCallerTextBytes": 5358,
+      "contextReplyBytes": 1062,
+      "officialCalls": 1,
+      "contextCalls": 1
+    },
+    {
+      "task": "Resume after known caller edit",
+      "officialKnownLineTextBytes": 57,
+      "contextDeltaAndLineBytes": 1147,
+      "officialCalls": 1,
+      "contextCalls": 2,
+      "newDeltaItems": 1
+    }
+  ],
+  "idleDelta": {
+    "sourceReads": 0,
+    "sourceBytes": 0,
+    "metadataBatches": 0,
+    "graphBuilds": 0
+  },
+  "firstLiveIndex": {
+    "scripts": 15,
+    "sourceReads": 0
+  },
+  "consistency": {
+    "requireTargetFound": true,
+    "remoteFireFound": true,
+    "knownCallerImpactFound": true,
+    "renameAndReparentStableId": true,
+    "changedContextIdentifiedEditedCaller": true
+  }
+}

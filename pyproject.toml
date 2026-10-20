@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "roblox-context-mcp"
+version = "0.3.0"
+description = "Metadata-first, read-only Roblox Studio context for MCP clients"
+requires-python = ">=3.11"
+dependencies = ["mcp>=1.26,<2", "tree-sitter==0.25.2", "tree-sitter-luau==1.2.0"]
+
+[project.scripts]
+roblox-context = "roblox_context.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["roblox_context*"]

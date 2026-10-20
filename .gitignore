@@ -1,0 +1,9 @@
+.context/
+projects/
+build/
+__pycache__/
+*.egg-info/
+.venv/
+dist/
+*.spec
+*.pyc

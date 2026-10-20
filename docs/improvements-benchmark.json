@@ -1,0 +1,69 @@
+{
+  "method": "Compact UTF-8 JSON name/arguments + parsed result payload; excludes JSON-RPC framing. Local deterministic fixture, not account quota.",
+  "schemaBytes": {
+    "before": 4456,
+    "after": 5340,
+    "increase": 884
+  },
+  "tasks": {
+    "find_literal": {
+      "baseline": {
+        "calls": 4,
+        "requestBytes": 449,
+        "responseBytes": 3552,
+        "answer": {
+          "network": [
+            3
+          ]
+        }
+      },
+      "improved": {
+        "calls": 1,
+        "requestBytes": 132,
+        "responseBytes": 934,
+        "answer": {
+          "network": [
+            3
+          ]
+        }
+      },
+      "complete": true
+    },
+    "retained_read": {
+      "baseline": {
+        "calls": 1,
+        "requestBytes": 119,
+        "responseBytes": 660,
+        "answer": "lines 1..5"
+      },
+      "improved": {
+        "calls": 1,
+        "requestBytes": 291,
+        "responseBytes": 201,
+        "answer": "same retained lines 1..5"
+      },
+      "unchanged": true
+    },
+    "resume": {
+      "baseline": {
+        "calls": 3,
+        "requestBytes": 239,
+        "responseBytes": 1355,
+        "answer": "checkpoint + network change"
+      },
+      "improved": {
+        "calls": 1,
+        "requestBytes": 88,
+        "responseBytes": 1029,
+        "answer": "checkpoint + network change"
+      },
+      "changedObjects": 1
+    }
+  },
+  "limits": [
+    "Small code/range tasks can have little or negative savings.",
+    "Scope discovery costs both workflows; a large metadata listing is avoidable with focused queries.",
+    "Server-private source traffic and schema cost are distinct from model-visible response size.",
+    "Known text must still be retained by the caller; a hash alone is insufficient."
+  ]
+}
