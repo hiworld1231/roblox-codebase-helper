@@ -199,7 +199,7 @@ def install(*, clients, plugin_dir, root=None, runtime_python=None, language='en
     for target in skill_paths:
         shutil.copytree(source_skill, target, dirs_exist_ok=True)
         atomic_text(target / '.codebase-helper-managed', 'Managed by roblox-codebase-helper\n')
-    record = {'version': '0.3.1', 'root': str(root), 'clients': list(clients), 'plugin': str(plugin_dir / 'RobloxContextMCP.rbxmx'),
+    record = {'version': '0.3.2', 'root': str(root), 'clients': list(clients), 'plugin': str(plugin_dir / 'RobloxContextMCP.rbxmx'),
               'command': str(command), 'args': args, 'skills': [str(p) for p in skill_paths], 'language': language, 'automaticSourceScan': False}
     atomic_text(root / 'install.json', json.dumps(record, indent=2) + '\n', private=True)
     progress('Installed. Reconnect your AI clients, then connect the project in Studio.')

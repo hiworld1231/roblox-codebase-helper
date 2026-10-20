@@ -23,7 +23,7 @@ class Runtime:
         request = urllib.request.Request(f"http://127.0.0.1:{self.settings['port']}{path}",
             data=json.dumps(data).encode(), headers={'Authorization': 'Bearer ' + self.settings['token'], 'Content-Type': 'application/json'})
         try:
-            with urllib.request.urlopen(request, timeout=180) as response:
+            with urllib.request.urlopen(request, timeout=3 if path == '/client/health' else 180) as response:
                 result = json.load(response)
         except urllib.error.HTTPError as error:
             try:
