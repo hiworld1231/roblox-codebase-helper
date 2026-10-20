@@ -1,6 +1,6 @@
 # Current task
 
-0.3.0: terminal-first Windows/Linux setup, native Studio panel and an agent skill.
+0.3.3: terminal-first Windows/Linux setup, native Studio panel and an agent skill.
 The user explicitly rejected a browser installer; it was removed. All product UI
 lives in Roblox Studio. Publish to hiworld1231/roblox-codebase-helper.
 
@@ -29,11 +29,25 @@ lives in Roblox Studio. Publish to hiworld1231/roblox-codebase-helper.
 - Previous 658-script CSS context measurements remain in CSS_BENCHMARK.json; no new
   account-quota claim or fixed whole-session percentage is made.
 
-## Remaining verification
+## Release acceptance
 
-Verify Windows/Linux frozen release builds and one-command downloaded binary setup in
-CI before calling the public bootstrap ready. Record native UI interaction/screenshot
-limits separately; a game viewport screenshot is not panel visual acceptance. Existing
-unsaved-editor search acceptance remains unconfirmed, as documented in VALIDATION.md.
-Reconnect clients after setup. No CSS game objects/sources/attributes/Play state were
-changed. Existing BloxySync checkout/dependencies are not modified.
+- Published v0.3.3 portable executables for Windows x86_64 and Linux x86_64.
+- Both platform builds pass all 55 tests, frozen CLI/resource checks, isolated automatic
+  installation and seven-tool MCP startup from the installed executable.
+- Actual published curl and Windows PowerShell one-command installers both pass against
+  isolated homes and Studio profiles: GitHub Actions run 39471518738.
+- Release build evidence: GitHub Actions run 39470931538. Bootstrap uses the updated
+  main-branch scripts with built-in .NET SHA-256 verification for Windows PowerShell.
+- Product UI, skill and documentation are English only. No browser installer exists.
+
+## Connection behavior and limits
+
+After Connect this project, connection failures retry automatically with backoff while
+MCP runs. Newly created scripts, renames, moves and deletions update metadata automatically;
+source changes invalidate selected cached code. New source is fetched only on demand.
+Fresh Studio/plugin sessions require explicit Connect again. Client configuration/schema
+updates require reconnecting MCP once. No daemon keeps it running after all clients exit.
+Native panel objects/layout/status were inspected, but full native button/pixel visual
+acceptance is not claimed. Existing unsaved-editor search acceptance remains unconfirmed.
+CSS game objects/sources/attributes/Play state were not changed. Existing BloxySync
+checkout/dependencies remain unchanged.

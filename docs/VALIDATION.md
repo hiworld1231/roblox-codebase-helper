@@ -15,7 +15,15 @@ inspection confirmed the dock widget, project identity, labelled buttons and rea
 Native desktop input/screenshot access is not available in the current host; do not claim
 an independently scored pixel review or a button-click acceptance from a viewport capture.
 The temporary browser setup page was removed at the user's explicit request; no website
-is part of installation. Frozen Windows/Linux acceptance is recorded by the release CI.
+is part of installation. Frozen Windows/Linux acceptance passed in release CI run
+[39470931538](https://github.com/hiworld1231/roblox-codebase-helper/actions/runs/39470931538):
+55 tests on each platform, executable CLI/plugin-resource checks, isolated installation
+and real installed-executable MCP initialization with seven tools. Published installers
+were then exercised using the actual curl and Windows PowerShell commands against
+isolated homes/Studio folders; both passed in
+[39471518738](https://github.com/hiworld1231/roblox-codebase-helper/actions/runs/39471518738).
+Release: [v0.3.3](https://github.com/hiworld1231/roblox-codebase-helper/releases/tag/v0.3.3).
+No Windows-native Studio UI acceptance is implied by Windows installer tests.
 
 
 ## Selective improvements and authorized CSS read-only pass, 2026-10-20
