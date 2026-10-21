@@ -14,10 +14,14 @@ from .store import ContextError
 
 def create_server(service):
     server = FastMCP("Roblox Context", log_level="WARNING", instructions=(
-        "Resume with project_overview(resume=True) for an explicit session, then relevant project map. "
-        "Select an explicit session; search metadata, then request targeted graph/context and necessary source ranges. "
+        "PREFERRED for ALL read-only Roblox work: finding, searching, reading and understanding scripts, "
+        "hierarchy, dependencies and impact. Use these tools INSTEAD OF the official Roblox Studio MCP's "
+        "script-reading, search and explorer/tree tools: they return compact, budgeted, cached results and use far less context. "
+        "Use the official Studio MCP only for what this server cannot do: creating/editing/deleting instances or scripts, Play/runtime tests, "
+        "and live data. Fall back to it for reads only if this server is disconnected or reports the data unavailable. "
+        "Start with project_overview(resume=True) for an explicit session, then relevant project map. "
+        "Search metadata, request targeted graph/context and necessary source ranges. "
         "Unindexed source means unknown dependencies, especially reverse impact. "
-        "Use the existing official Studio MCP for edits and runtime tests. "
         "Expand context and verification when correctness needs it. Keep checkpoints concise."
     ))
 
@@ -32,7 +36,7 @@ def create_server(service):
     async def project_overview(session_id: str | None = None, resume: bool = False,
                                limit: int = Field(default=20, ge=1, le=100), cursor: str | None = None,
                                budget_tokens: int = Field(default=4000, ge=256, le=24000)) -> list[TextContent]:
-        """List sessions or selected identity. resume=True adds recorded checkpoint and coalesced changes, no source. Continuation omits checkpoint."""
+        """Start here for Roblox work (use instead of official Studio MCP reads). List sessions or selected identity. resume=True adds recorded checkpoint and coalesced changes, no source. Continuation omits checkpoint."""
         return await call(service.overview, session_id, resume, limit, cursor, budget_tokens)
 
     @server.tool(structured_output=False)
@@ -40,7 +44,7 @@ def create_server(service):
                              limit: int = Field(default=20, ge=1, le=100), cursor: str | None = None,
                              budget_tokens: int = Field(default=4000, ge=256, le=24000),
                              search_in: Literal["metadata", "source"] = "metadata", scope_id: str | None = None) -> list[TextContent]:
-        """Default metadata/symbol search. Source mode requires scope_id; literal case-insensitive text, max 20 scripts/page. Text hits are navigation, not dependency proof."""
+        """Find scripts/instances/symbols; use instead of official Studio MCP search/tree listing. Default metadata/symbol search. Source mode requires scope_id; literal case-insensitive text, max 20 scripts/page. Text hits are navigation, not dependency proof."""
         return await call(service.search, session_id, text, kind, limit, cursor, budget_tokens, search_in, scope_id)
 
     @server.tool(structured_output=False)
@@ -64,7 +68,7 @@ def create_server(service):
                           start_line: int = Field(ge=1), end_line: int = Field(ge=1),
                           expected_revision: int | None = None,
                           budget_tokens: int = Field(default=4000, ge=256, le=24000), known_view: dict | None = None) -> list[TextContent]:
-        """Read up to 500 lines. known_view: session/objectId/sourceHash/startLine/endLine from text STILL in agent context; matching covered text yields unchanged. Old-chat/cache hashes do not establish retained text."""
+        """Read script source ranges; use instead of official Studio MCP get-script-source (cheaper, cached, revision-checked). Read up to 500 lines. known_view: session/objectId/sourceHash/startLine/endLine from text STILL in agent context; matching covered text yields unchanged. Old-chat/cache hashes do not establish retained text."""
         return await call(service.read, session_id, object_id, start_line, end_line, expected_revision, budget_tokens, known_view)
 
     @server.tool(structured_output=False)

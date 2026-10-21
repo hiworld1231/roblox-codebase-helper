@@ -12,6 +12,8 @@ Python 3.11+ and can also run on macOS, but no macOS binary/native acceptance is
   `~/.claude.json`; optional Windows Claude Desktop config under `%APPDATA%/Claude`.
 - Agent skill: `~/.agents/skills/roblox-codebase-helper` and `~/.claude/skills/roblox-codebase-helper`.
   Unrelated existing skill folders are not overwritten.
+- Agent guidance: a delimited managed block in `~/.codex/AGENTS.md` / `~/.claude/CLAUDE.md` tells agents
+  to prefer `roblox_context` for reads over the official Studio MCP. Other text in those files is preserved.
 - One native plugin: `RobloxContextMCP.rbxmx` in the actual Studio Plugins folder.
 - Previous client configuration/plugin copies: private `.context/backup-*` and
   `.context/previous-plugin.rbxmx` inside the tool data directory.

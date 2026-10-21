@@ -97,6 +97,43 @@ def render_client(path, client, command, args):
     return json.dumps(value, ensure_ascii=False, indent=2) + '\n'
 
 
+GUIDE_BEGIN = '<!-- BEGIN roblox-codebase-helper (managed; do not edit) -->'
+GUIDE_END = '<!-- END roblox-codebase-helper -->'
+GUIDE = GUIDE_BEGIN + """
+## Roblox work: prefer the roblox_context MCP
+
+For any read-only Roblox Studio task (finding, searching, reading or understanding scripts,
+hierarchy, dependencies, callers, impact), use the `roblox_context` MCP tools first:
+project_overview, project_search, graph_query, get_context, read_source, changed_context,
+task_checkpoint. They return compact, budgeted, cached results and use much less context
+than the official Roblox Studio MCP's script/search/tree reads.
+Use the official Studio MCP only for edits, Play and runtime tests, or as a fallback for
+reads when roblox_context is disconnected or reports data unavailable.
+""" + GUIDE_END + '\n'
+
+
+def guide_paths(clients, home=None):
+    env = {} if home is not None else os.environ
+    base = Path(home or Path.home())
+    paths = []
+    if 'codex' in clients:
+        paths.append(Path(env.get('CODEX_HOME', base / '.codex')) / 'AGENTS.md')
+    if any(c.startswith('claude') for c in clients):
+        paths.append(base / '.claude/CLAUDE.md')
+    return paths
+
+
+def render_guide(path):
+    """Add or refresh only our delimited block; keep all other user text byte-for-byte."""
+    old = path.read_text(encoding='utf-8') if path.exists() else ''
+    if GUIDE_BEGIN in old:
+        head, _, rest = old.partition(GUIDE_BEGIN)
+        if GUIDE_END not in rest:
+            raise ValueError('Unterminated managed block in ' + str(path))
+        return head + GUIDE + rest.partition(GUIDE_END)[2].lstrip('\n')
+    return (old.rstrip() + '\n\n' if old.strip() else '') + GUIDE
+
+
 def copy_payload(destination):
     """Only tool code/assets. Never copy private profiles, game sources, caches or Git state."""
     destination.mkdir(parents=True, exist_ok=True)
@@ -157,6 +194,7 @@ def install(*, clients, plugin_dir, root=None, runtime_python=None, language='en
         skill_paths.append(home / '.agents/skills' / MARKER)
     if any(c.startswith('claude') for c in clients):
         skill_paths.append(home / '.claude/skills' / MARKER)
+    guides = [(p, render_guide(p)) for p in guide_paths(clients, client_home)]
     source_skill = SOURCE / 'skills' / MARKER
     for target in skill_paths:
         if target.exists() and not (target / '.codebase-helper-managed').exists():
@@ -199,8 +237,11 @@ def install(*, clients, plugin_dir, root=None, runtime_python=None, language='en
     for target in skill_paths:
         shutil.copytree(source_skill, target, dirs_exist_ok=True)
         atomic_text(target / '.codebase-helper-managed', 'Managed by roblox-codebase-helper\n')
+    for path, text in guides:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        atomic_text(path, text)
     record = {'version': '0.3.3', 'root': str(root), 'clients': list(clients), 'plugin': str(plugin_dir / 'RobloxContextMCP.rbxmx'),
-              'command': str(command), 'args': args, 'skills': [str(p) for p in skill_paths], 'language': language, 'automaticSourceScan': False}
+              'command': str(command), 'args': args, 'skills': [str(p) for p in skill_paths], 'guides': [str(p) for p, _ in guides], 'language': language, 'automaticSourceScan': False}
     atomic_text(root / 'install.json', json.dumps(record, indent=2) + '\n', private=True)
     progress('Installed. Reconnect your AI clients, then connect the project in Studio.')
     return record

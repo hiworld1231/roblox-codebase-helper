@@ -68,9 +68,21 @@ class InstallationTests(unittest.TestCase):
             self.assertEqual(result['args'],again['args'])
             self.assertTrue((home/'.agents/skills/roblox-codebase-helper/SKILL.md').exists())
             self.assertTrue((home/'.claude/skills/roblox-codebase-helper/SKILL.md').exists())
+            for guide in (home/'.codex/AGENTS.md',home/'.claude/CLAUDE.md'):
+                text=guide.read_text();self.assertEqual(text.count('BEGIN roblox-codebase-helper'),1);self.assertIn('roblox_context',text)
             self.assertIn('RobloxCodebaseHelper',(plugins/'RobloxContextMCP.rbxmx').read_text())
             self.assertFalse((root/'app/.context').exists())
             self.assertFalse((root/'.context/context.sqlite3').exists())
+
+    def test_guide_block_preserves_user_text_and_refreshes(self):
+        from roblox_context.install import render_guide
+        with tempfile.TemporaryDirectory() as temp:
+            path=Path(temp)/'CLAUDE.md';path.write_text('# Mine\nkeep me\n')
+            first=render_guide(path);path.write_text(first)
+            self.assertTrue(first.startswith('# Mine\nkeep me\n'))
+            self.assertEqual(render_guide(path),first)
+            path.write_text(first+'\nafter\n')
+            self.assertIn('after',render_guide(path))
 
     def test_multi_place_workspace_and_private_consistent_backup(self):
         with tempfile.TemporaryDirectory() as temp:
