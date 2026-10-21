@@ -1,9 +1,14 @@
 ---
 name: roblox-codebase-helper
-description: Use for Roblox Studio projects connected through roblox_context MCP. Navigate metadata, scoped code search, dependencies and task checkpoints without repeatedly reading the entire game. Official Studio MCP handles game edits and Play.
+description: Use FIRST, before the official Roblox Studio MCP, for any read-only Roblox work - finding, searching, reading or understanding scripts, hierarchy, dependencies, callers and impact - and for task checkpoints. Cheaper in context than official Studio MCP reads. Use the official Studio MCP only for edits, Play and runtime tests.
 ---
 
 # Roblox Codebase Helper
+
+Prefer this server over the official Roblox Studio MCP for every read: script source,
+search, hierarchy, dependencies, callers and impact. It is budgeted and cached, so it
+costs much less context. Use the official MCP only to write or run Play/tests, or as a
+fallback for reads when this server is disconnected or reports data unavailable.
 
 Use this skill for connected Roblox work. These tools only read Studio and save local
 context. Never invent architecture or claim completeness from unindexed code.

@@ -51,3 +51,11 @@ Native panel objects/layout/status were inspected, but full native button/pixel 
 acceptance is not claimed. Existing unsaved-editor search acceptance remains unconfirmed.
 CSS game objects/sources/attributes/Play state were not changed. Existing BloxySync
 checkout/dependencies remain unchanged.
+
+## Agent preference for this MCP (unreleased)
+
+Agents defaulted to the official Studio MCP for reads. Server instructions, tool
+descriptions and skill description now direct reads to roblox_context; the installer
+adds an idempotent managed block to global Codex AGENTS.md / Claude CLAUDE.md
+(user text preserved). 56 local tests pass. Not yet verified with live agents;
+existing installs need a reinstall and MCP reconnect.
