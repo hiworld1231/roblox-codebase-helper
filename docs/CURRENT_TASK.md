@@ -1,6 +1,6 @@
 # Current task
 
-0.3.3: terminal-first Windows/Linux setup, native Studio panel and an agent skill.
+0.3.4: terminal-first Windows/Linux setup, native Studio panel and an agent skill.
 The user explicitly rejected a browser installer; it was removed. All product UI
 lives in Roblox Studio. Publish to hiworld1231/roblox-codebase-helper.
 
