@@ -240,7 +240,7 @@ def install(*, clients, plugin_dir, root=None, runtime_python=None, language='en
     for path, text in guides:
         path.parent.mkdir(parents=True, exist_ok=True)
         atomic_text(path, text)
-    record = {'version': '0.3.3', 'root': str(root), 'clients': list(clients), 'plugin': str(plugin_dir / 'RobloxContextMCP.rbxmx'),
+    record = {'version': '0.3.4', 'root': str(root), 'clients': list(clients), 'plugin': str(plugin_dir / 'RobloxContextMCP.rbxmx'),
               'command': str(command), 'args': args, 'skills': [str(p) for p in skill_paths], 'guides': [str(p) for p, _ in guides], 'language': language, 'automaticSourceScan': False}
     atomic_text(root / 'install.json', json.dumps(record, indent=2) + '\n', private=True)
     progress('Installed. Reconnect your AI clients, then connect the project in Studio.')
